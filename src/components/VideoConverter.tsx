@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, RefreshCw, LogOut, AlertCircle, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'https://9115-79-140-223-98.ngrok-free.app';// Updated production API URL
+const API_URL = 'http://172.20.10.5:8000';// Updated production API URL
 
 export default function VideoConverter() {
   const [converting, setConverting] = useState(false);
