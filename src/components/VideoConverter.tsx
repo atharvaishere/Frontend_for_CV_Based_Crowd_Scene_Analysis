@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, RefreshCw, LogOut, AlertCircle, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'http://localhost:8000';// Updated production API URL
+const API_URL = 'https://9115-79-140-223-98.ngrok-free.app';// Updated production API URL
 
 export default function VideoConverter() {
   const [converting, setConverting] = useState(false);
@@ -41,12 +41,12 @@ export default function VideoConverter() {
       const response = await fetch(`${API_URL}/analyze-and-return-video`, {
         method: 'POST',
         body: formData,
-        // Important: Let browser set Content-Type with boundary
+        credentials: 'include'  // Important for CORS with credentials
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Analysis failed - server error');
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
       }
 
       // Create blob from response
