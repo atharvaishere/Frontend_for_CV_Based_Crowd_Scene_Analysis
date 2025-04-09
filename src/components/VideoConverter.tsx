@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, RefreshCw, LogOut, AlertCircle, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'https://crownalysis.up.railway.app'; // Updated production API URL
+const API_URL = 'http://localhost:8000';// Updated production API URL
 
 export default function VideoConverter() {
   const [converting, setConverting] = useState(false);
