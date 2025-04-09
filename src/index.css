@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-gray-100;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  :root {
+    color-scheme: dark;
+  }
+}
+
+.glass-effect {
+  @apply bg-opacity-20 backdrop-blur-lg bg-white/10 border border-white/10;
+}
+
+.input-style {
+  @apply bg-white/5 border-0 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-400 
+         focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all duration-300;
+}
+
+.button-style {
+  @apply glass-effect hover:bg-white/20 active:bg-white/30 transition-all duration-300
+         text-white font-medium rounded-lg px-6 py-3 flex items-center justify-center gap-2;
+}
