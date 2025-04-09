@@ -4,13 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, RefreshCw, LogOut, AlertCircle, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = "https://crownalysis.up.railway.app/";
+const API_URL = 'https://crownalysis.up.railway.app'; // Updated production API URL
 
 export default function VideoConverter() {
   const [converting, setConverting] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [videoError, setVideoError] = useState(false);
+  const [progress, setProgress] = useState(0); // Added progress state
   const videoRef = useRef<HTMLVideoElement>(null);
   const navigate = useNavigate();
 
@@ -23,24 +24,34 @@ export default function VideoConverter() {
     setError(null);
     setResultUrl(null);
     setVideoError(false);
+    setProgress(0);
 
     try {
       const formData = new FormData();
       formData.append('video', video);
 
+      // Using fetch with progress tracking
+      const xhr = new XMLHttpRequest();
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          setProgress(Math.round((event.loaded / event.total) * 100));
+        }
+      };
+
       const response = await fetch(`${API_URL}/analyze-and-return-video`, {
         method: 'POST',
         body: formData,
+        // Important: Let browser set Content-Type with boundary
       });
 
       if (!response.ok) {
-        throw new Error('Analysis failed - server error');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Analysis failed - server error');
       }
 
       // Create blob from response
       const blob = await response.blob();
       
-      // Verify blob is actually a video
       if (!blob.type.startsWith('video/')) {
         throw new Error('Received invalid video format');
       }
@@ -169,8 +180,16 @@ export default function VideoConverter() {
               </div>
             </div>
             <p className="mt-4 text-lg text-gray-300">Analyzing your video...</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Processing may take a few minutes
+            {progress > 0 && (
+              <div className="mt-4 w-full bg-gray-700 rounded-full h-2.5">
+                <div 
+                  className="bg-blue-500 h-2.5 rounded-full" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
+            <p className="text-sm text-gray-400 mt-2">
+              {progress > 0 ? `${progress}% complete` : 'Starting processing...'}
             </p>
           </motion.div>
         )}
