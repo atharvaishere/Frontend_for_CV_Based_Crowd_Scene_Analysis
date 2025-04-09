@@ -1,5 +1,5 @@
 // src/services/api.ts
-const API_BASE_URL = 'http://localhost:8000';
+const API_URL = "https://crownalysis.up.railway.app/";
 
 export interface User {
   email: string;
